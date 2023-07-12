@@ -24,13 +24,8 @@ INVARIANT
     rs \/ os \/ gs \/ bs \/ offs = SIGNALS & /* coherency */
     rs /\ os /\ gs /\ bs /\ offs = {} /* coherency */ &
     rpc \/ gpc \/ offspc = PEDESTRIAN_SIGNALS & rpc /\ gpc /\ offspc = {}
-    & not(S1 : gs & S4 : gs)
-    & not(S1 : gs & S2 : gs)
-    & not(S1 : gs & S2 : gs)
-    & not(S2 : gs & S3 : gs)
-    & not(S3 : gs & S4 : gs)
-    & ((S1 : gs or S3 : gs) => ({PC1, PC3} <: rpc))
-    & ((S2 : gs or S4 : gs) => ({PC2, PC4} <: rpc))
+    & ran(TRANSITIONS[gs]) /\ (dom(TRANSITIONS[gs]) - ran(TRANSITIONS[gs])) = {}
+    & PEDESTRIAN_CROSSINGS[gpc] /\ gs = {}
 
 INITIALISATION
     rs := {} ||
@@ -74,14 +69,14 @@ OPERATIONS
     PRE
         {S1, S3} <: rs & S2 /: gs & S4 /: gs & os = {}
     THEN
-        gs := gs \/ {S1, S3} || rs := rs - {S1, S3} || gpc := gpc - {PC1, PC3} || rpc := rpc \/ {PC1, PC3}
+        gs := gs \/ {S1, S3} || rs := rs - {S1, S3} || gpc := gpc - PEDESTRIAN_CROSSINGS~[{S1, S3}] || rpc := rpc \/ PEDESTRIAN_CROSSINGS~[{S1, S3}]
     END;
     
     red_to_green2 = // set S2 and S4 to green
     PRE
         {S2, S4} <: rs & S1 /: gs & S3 /: gs & os = {}
     THEN
-        gs := gs \/ {S2, S4} || rs := rs - {S2, S4} || gpc := gpc - {PC2, PC4} || rpc := rpc \/ {PC2, PC4}
+        gs := gs \/ {S2, S4} || rs := rs - {S2, S4} || gpc := gpc - PEDESTRIAN_CROSSINGS~[{S2, S4}] || rpc := rpc \/ PEDESTRIAN_CROSSINGS~[{S2, S4}]
     END;
     
     green_to_orange = // Set green signals to orange

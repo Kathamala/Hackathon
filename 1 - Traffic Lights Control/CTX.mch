@@ -12,7 +12,7 @@ CONSTANTS
 PROPERTIES
     INTERSECT_LANES <: LANES * LANES &
     TRANSITIONS : SIGNALS <-> ( LANES * LANES ) &
-    PEDESTRIAN_CROSSINGS : PEDESTRIAN_SIGNALS <-> ( LANES * LANES ) &    
+    PEDESTRIAN_CROSSINGS : PEDESTRIAN_SIGNALS <-> SIGNALS &    
     INTERSECT_LANES = { 
         L1 |-> L2, L1 |-> L4, 
         L2 |-> L1, L2 |-> L3, 
@@ -29,13 +29,9 @@ PROPERTIES
         S4 |-> (L4 |-> L3)
     } &
     PEDESTRIAN_CROSSINGS = {
-        PC1 |-> (L1 |-> L3),
-        PC1 |-> (L3 |-> L2),
-        PC2 |-> (L2 |-> L4),
-        PC2 |-> (L4 |-> L2),
-        PC3 |-> (L1 |-> L3),
-        PC3 |-> (L3 |-> L1),
-        PC4 |-> (L2 |-> L4),
-        PC4 |-> (L4 |-> L2)      
+        PC1 |-> S1,
+        PC2 |-> S2,
+        PC3 |-> S3,
+        PC4 |-> S4
     }
 END
